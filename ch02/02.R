@@ -115,3 +115,76 @@ dcast(aqm, Month ~ variable, mean, subset = .(variable == c("Ozone", "Temp")))
 head(dcast(aqm, Month + Day ~ variable, mean, subset = .(variable == c("Ozone", "Temp"))))
 
 head(dcast(aqm, Month ~ variable + Day, mean, subset = .(variable == c("Temp"))), n = 3)
+
+head(mtcars)
+
+# 1つの集約変数ごとに平均を求める
+mtcars %>% group_by(am) %>% summarise(mpg.mean=mean(mpg))
+
+# amとvsの組み合わせでmpgの平均値を集計
+mtcars %>% group_by(am, vs) %>% summarise(mpg.mean=mean(mpg))
+
+mtcars %>% group_by(am,vs) %>% summarise(cyl.max=cyl[which.max(mpg)])
+
+mtcars %>% group_by(am, vs) %>% summarise(mpg.mean=mean(mpg), disp.mean=mean(disp))
+
+mtcars %>% group_by(am, vs) %>% mutate(mpg.mean=mean(mpg), disp.mean=mean(disp)) %>% head()
+
+# データフレームのリストの作成
+l <- list(airquality[1:3,], airquality[11:13,], airquality[21:23,])
+
+l
+
+#リストをデータフレームに変換
+# df <- rbind_all(l) # これはもう使えなくなる
+df <- bind_rows(l) # これからはこの関数を使用
+
+df
+
+library(foreach)
+
+# ここの処理はよく分からない
+# date.from <- as.Date("2014-04-01")
+# date.to <- as.Date("2014-04-03")
+# df2 <- rbind_all(foreach(day=seq.Date(date.from, date.to, "days"), combine=rbind) %do% { f <- sqrintf("aq_%s.csv", day) read.csv(f, header=T, stringsAsFactors=F)})
+
+# df2
+
+aq <- airquality
+
+names(aq)
+
+names(aq)[3] <- "wind"
+
+names(aq)
+
+names(aq)[names(aq)=="Temp"] <- "temp"
+
+names(aq)
+
+# head(rename(airquality, replace= c(Ozone = "Oooozone"))) # これはサポートされていない関数
+
+x <- c("a", "b", "c")
+
+x <- ifelse(x=="a", "AAA", ifelse(x=="c", "CCC", x))
+
+x
+
+x <- c("a", "b", "c")
+mapvalues(x, c("a", "c"), c("AAA", "CCC"))
+
+rebalue(x, c(a = "AAA", c = "CCC")
+
+round(135/10)*10
+
+floor(135/ 10)*10
+
+ceiling(135/100)*100
+
+round_any(135, 10)
+
+round_any(135, 10, floor)
+
+round_any(135, 100, ceiling)
+
+d_ply(airquality, .(Month), function(x){month <- x$Month[1] write.csv(x, sprint("airquality_%s.csv", month)) })
